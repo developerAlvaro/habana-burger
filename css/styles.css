@@ -127,6 +127,15 @@ h2 {
     overflow: hidden;
 }
 
+/* Desactivar fixed en móvil */
+@media (max-width: 767.98px) {
+    .jumbotron {
+        background-attachment: scroll;
+        background-size: cover;
+        min-height: 80vh;
+    }
+}
+
 .jumbotron-overlay {
     position: absolute;
     inset: 0;
