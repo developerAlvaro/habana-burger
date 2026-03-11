@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Web Project</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#inicio">Habana Burguer</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNavbar">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#inicio">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#servicios">Servicios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#portafolio">Promos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#sobre-mi">Sobre nosotros</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contacto">Contacto</a>
+                    </li>
+
+                    <!-- Carrito -->
+                    <li class="nav-item ms-lg-2 cart-nav-item">
+                        <button
+                            id="openCartBtn"
+                            class="btn btn-outline-light btn-sm mt-2 mt-lg-0 cart-nav-btn"
+                            type="button"
+                            data-bs-toggle="offcanvas"
+                            data-bs-target="#cartOffcanvas"
+                            aria-controls="cartOffcanvas"
+                        >
+                            <i class="bi bi-cart3"></i> Carrito
+                            <span id="cartCountBadge" class="badge rounded-pill bg-danger cart-count-badge">0</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <header id="inicio">
+        <div class="jumbotron" style="background-image: url('img/equipo.png');">
+            <div class="jumbotron-overlay"></div>
+            <div class="container jumbotron-content text-center">
+                <span class="badge bg-primary mb-3 jumbotron-badge">Bienvenido</span>
+                <h1 class="display-3 fw-bold jumbotron-title">Habana Burguer</h1>
+                <p class="lead jumbotron-lead">Un lugar donde la plancha nunca se enfría y el sabor es el protagonista.
+Preparamos hamburguesas jugosas y panchos con panceta crocante, hechos al momento para que cada bocado valga la pena..</p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap mt-4">
+                    <a href="#servicios" class="btn btn-primary btn-lg jumbotron-btn">Ver Servicios</a>
+                    <a href="#contacto" class="btn btn-outline-light btn-lg jumbotron-btn">Contáctame</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+        <section id="servicios" class="container py-5">
+            <div class="text-center mb-5">
+                <span class="services-kicker">MENÚ</span>
+                <h2 class="services-title mt-3">Nuestros productos</h2>
+                <p class="services-subtitle mx-auto">
+                    Elegí tu favorito y agregalo al carrito.
+                </p>
+            </div>
+
+            <div class="row g-4 justify-content-center">
+                <div class="col-12 col-md-6 col-xl-5">
+                    <article class="service-card card h-100 border-0">
+                        <img src="img/hamburguesa.jpg" class="service-img" alt="Hamburguesa con queso, huevo y panceta">
+                        <div class="card-body p-4">
+                            <span class="service-price">$120</span>
+                            <div class="service-icon"><i class="bi bi-egg-fried"></i></div>
+                            <h3 class="service-card-title">Hamburguesa completa</h3>
+                            <p class="service-card-text">
+                                Hamburguesa con queso, huevo y panceta.
+                            </p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-12 col-md-6 col-xl-5">
+                    <article class="service-card card h-100 border-0">
+                        <img src="img/pancho.webp" class="service-img" alt="Pancho con queso, panceta y papas pai">
+                        <div class="card-body p-4">
+                            <span class="service-price">$100</span>
+                            <div class="service-icon"><i class="bi bi-cup-hot"></i></div>
+                            <h3 class="service-card-title">Pancho especial</h3>
+                            <p class="service-card-text">
+                                Pancho con queso, panceta y papas pai.
+                            </p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+        <!-- ...existing code... -->
+        <section id="portafolio" class="portafolio-section py-5">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <span class="services-kicker">PROMOS Y EXPERIENCIA</span>
+                    <h2 class="services-title mt-3">Más que comida rápida</h2>
+                    <p class="services-subtitle mx-auto">
+                        Descubrí promociones del día, combos destacados y cómo pedir en pocos pasos por WhatsApp.
+                    </p>
+                </div>
+
+                <div class="row g-4 mb-5">
+                    <div class="col-12 col-lg-6">
+                        <article class="promo-block card border-0 h-100">
+                            <div class="card-body p-4 p-lg-5">
+                                <div class="promo-block-head mb-3">
+                                    <span class="promo-chip"><i class="bi bi-lightning-charge"></i> Promo del día</span>
+                                </div>
+                                <h3 class="promo-title">2x1 en Panchos especiales</h3>
+                                <p class="promo-text mb-3">De 20:00 a 22:00 llevate dos panchos especiales por el precio de uno.</p>
+                                <ul class="promo-list mb-0">
+                                    <li><i class="bi bi-check-circle"></i> Queso, panceta y papas pai</li>
+                                    <li><i class="bi bi-check-circle"></i> Salsas a elección</li>
+                                    <li><i class="bi bi-check-circle"></i> Stock limitado por día</li>
+                                </ul>
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="col-12 col-lg-6">
+                        <article class="promo-block card border-0 h-100 promo-block-alt">
+                            <div class="card-body p-4 p-lg-5">
+                                <div class="promo-block-head mb-3">
+                                    <span class="promo-chip"><i class="bi bi-stars"></i> Combo destacado</span>
+                                </div>
+                                <h3 class="promo-title">Combo Hamburguesa Full + Refresco</h3>
+                                <p class="promo-text mb-3">Hamburguesa completa con queso, huevo y panceta + bebida fría.</p>
+                                <div class="d-flex align-items-center gap-3 flex-wrap">
+                                    <span class="combo-price">$180</span>
+                                    <span class="combo-note">Ahorro de $40 frente a compra individual</span>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-12 col-lg-7">
+                        <div class="card border-0 h-100 info-surface">
+                            <div class="card-body p-4 p-lg-5">
+                                <h3 class="block-title mb-4"><i class="bi bi-chat-quote"></i> Opiniones de clientes</h3>
+                                <div class="row g-3">
+                                    <div class="col-12 col-md-6">
+                                        <article class="review-card">
+                                            <p>"La hamburguesa llegó caliente y brutal. Repetimos seguro."</p>
+                                            <span>— Camila R.</span>
+                                        </article>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <article class="review-card">
+                                            <p>"Pedí por WhatsApp en 1 minuto. Súper práctico."</p>
+                                            <span>— Martín S.</span>
+                                        </article>
+                                    </div>
+                                </div>
+
+                                <h3 class="block-title mt-4 mb-3"><i class="bi bi-fire"></i> Más vendidos</h3>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="popular-badge">Hamburguesa completa</span>
+                                    <span class="popular-badge">Pancho especial</span>
+                                    <span class="popular-badge">Combo Full</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-5">
+                        <div class="card border-0 h-100 steps-card">
+                            <div class="card-body p-4 p-lg-5">
+                                <h3 class="block-title mb-4"><i class="bi bi-whatsapp"></i> Cómo hacer tu pedido</h3>
+                                <ol class="order-steps mb-4">
+                                    <li>Elegí tu producto y agregalo al carrito.</li>
+                                    <li>Personalizá ingredientes a tu gusto.</li>
+                                    <li>Finalizá compra y enviá el pedido por WhatsApp.</li>
+                                </ol>
+                                <a class="btn btn-success w-100" href="https://wa.me/59895369347" target="_blank" rel="noopener noreferrer">
+                                    <i class="bi bi-whatsapp me-2"></i>Hacer pedido ahora
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ...existing code... -->
+        <section id="sobre-mi" class="aboutme-section py-5">
+            <div class="container">
+                <div class="row align-items-center gap-4" style="justify-content: center;">
+                    <div class="col-12 col-lg-5">
+                        <div class="aboutme-profile">
+                            <div class="aboutme-image-placeholder">
+                                <i class="bi bi-shop"></i>
+                            </div>
+                            <div class="aboutme-info">
+                                <h3 class="aboutme-name">Nuestro equipo</h3>
+                                <p class="aboutme-role">Comida rápida hecha con sabor y dedicación</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-7">
+                        <div class="text-center mb-5">
+                            <span class="services-kicker">SOBRE NOSOTROS</span>
+                            <h2 class="services-title mt-3">Pasión por la comida rápida</h2>
+                        </div>
+                        <p class="aboutme-description">
+                            Somos un emprendimiento dedicado a ofrecer comida rápida rica, abundante y preparada al momento. 
+                            Trabajamos con ingredientes seleccionados para brindar hamburguesas y panchos con excelente sabor, 
+                            buena presentación y una atención cercana. Nuestro objetivo es que cada cliente disfrute una experiencia 
+                            rápida, práctica y deliciosa, con la comodidad de hacer su pedido directamente por WhatsApp.
+                        </p>
+
+                        <div class="aboutme-skills">
+                            <div class="skill-item skill-card-flavor">
+                                <div class="skill-header">
+                                    <span class="skill-name"><i class="bi bi-fire"></i> Sabor irresistible</span>
+                                    <span class="skill-percent">95%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-percent="95"></div>
+                                </div>
+                                <p class="skill-description">Combinaciones intensas en hamburguesas y panchos con ingredientes bien cargados.</p>
+                            </div>
+
+                            <div class="skill-item skill-card-quality">
+                                <div class="skill-header">
+                                    <span class="skill-name"><i class="bi bi-stars"></i> Ingredientes de calidad</span>
+                                    <span class="skill-percent">92%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-percent="92"></div>
+                                </div>
+                                <p class="skill-description">Queso, panceta, huevo y toppings elegidos para lograr un mejor producto final.</p>
+                            </div>
+
+                            <div class="skill-item skill-card-speed">
+                                <div class="skill-header">
+                                    <span class="skill-name"><i class="bi bi-lightning-charge"></i> Preparación rápida</span>
+                                    <span class="skill-percent">90%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-percent="90"></div>
+                                </div>
+                                <p class="skill-description">Pedidos ágiles y atención directa para que la comida llegue rápido y lista para disfrutar.</p>
+                            </div>
+
+                            <div class="skill-item skill-card-service">
+                                <div class="skill-header">
+                                    <span class="skill-name"><i class="bi bi-whatsapp"></i> Atención personalizada</span>
+                                    <span class="skill-percent">94%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-percent="94"></div>
+                                </div>
+                                <p class="skill-description">Cada pedido se confirma por WhatsApp con opciones de ingredientes y trato cercano.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ...existing code... -->
+        <section id="contacto" class="contact-section py-5">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <span class="services-kicker">CONTACTO</span>
+                    <h2 class="services-title mt-3">Hablemos de tu próximo pedido</h2>
+                    <p class="services-subtitle mx-auto">
+                        Completa el formulario y se abrirá WhatsApp con el mensaje listo para enviar.
+                    </p>
+                </div>
+
+                <div class="row g-4 align-items-stretch">
+                    <div class="col-12 col-lg-5">
+                        <aside class="contact-card h-100">
+                            <div class="contact-card-icon">
+                                <i class="bi bi-whatsapp"></i>
+                            </div>
+                            <h3 class="contact-card-title">Contacto directo</h3>
+                            <p class="contact-card-text">
+                                Respuesta rápida por WhatsApp para consultas y pedidos.
+                            </p>
+
+                            <div class="contact-data">
+                                <div class="contact-data-item">
+                                    <i class="bi bi-whatsapp"></i>
+                                    <span>093 484 775</span>
+                                </div>
+                                <div class="contact-data-item">
+                                    <i class="bi bi-person-badge"></i>
+                                    <span>Álvaro Aguilar</span>
+                                </div>
+                                <div class="contact-data-item">
+                                    <i class="bi bi-globe2"></i>
+                                    <span>Altivo Esteves #1980</span>
+                                </div>
+                            </div>
+                        </aside>
+                    </div>
+
+                    <div class="col-12 col-lg-7">
+                        <form id="contactForm" class="contact-form" novalidate>
+                            <div class="row g-4">
+                                <div class="col-12 col-md-6">
+                                    <label for="nombre" class="form-label contact-label">Nombre</label>
+                                    <div class="contact-input-group">
+                                        <span class="contact-input-icon"><i class="bi bi-person"></i></span>
+                                        <input type="text" class="form-control contact-input" id="nombre" name="nombre" placeholder="Tu nombre" required minlength="3">
+                                    </div>
+                                    <div class="invalid-feedback d-block" data-error-for="nombre"></div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label for="telefono" class="form-label contact-label">Teléfono</label>
+                                    <div class="contact-input-group">
+                                        <span class="contact-input-icon"><i class="bi bi-telephone"></i></span>
+                                        <input type="tel" class="form-control contact-input" id="telefono" name="telefono" placeholder="Ej: 099123456" required>
+                                    </div>
+                                    <div class="invalid-feedback d-block" data-error-for="telefono"></div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="mensaje" class="form-label contact-label">Mensaje</label>
+                                    <textarea
+                                        class="form-control contact-textarea"
+                                        id="mensaje"
+                                        name="mensaje"
+                                        rows="6"
+                                        placeholder="Escribe aquí tu mensaje..."
+                                        required
+                                        minlength="10"
+                                    ></textarea>
+                                    <div class="invalid-feedback d-block" data-error-for="mensaje"></div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div id="contactFormAlert" class="contact-alert" aria-live="polite"></div>
+                                </div>
+
+                                <div class="col-12">
+                                    <button type="submit" class="btn contact-submit-btn">
+                                        <i class="bi bi-send"></i>
+                                        Enviar mensaje
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ...existing code... -->
+    </main>
+    <footer>
+        <p>&copy; 2026 My Web Project</p>
+    </footer>
+
+    <button id="scrollTopBtn" class="scroll-top-btn" type="button" aria-label="Volver arriba">
+        <i class="bi bi-arrow-up"></i>
+    </button>
+
+    <!-- Offcanvas carrito -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 id="cartOffcanvasLabel" class="offcanvas-title">Tu carrito</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column">
+            <div id="cartItems" class="cart-items mb-3"></div>
+
+            <div class="cart-summary mt-auto">
+                <div class="mb-3">
+                    <label for="cartCustomerName" class="form-label fw-semibold small mb-1">Tu nombre <span class="text-danger">*</span></label>
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="cartCustomerName"
+                            placeholder="Ej: Juan García"
+                            maxlength="60"
+                            autocomplete="name"
+                        >
+                    </div>
+                    <div id="cartCustomerNameError" class="text-danger small mt-1" style="display:none;">Por favor ingresá tu nombre antes de continuar.</div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <strong>Total</strong>
+                    <strong id="cartTotal">$0.00</strong>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button id="checkoutBtn" class="btn btn-primary"><i class="bi bi-whatsapp me-1"></i>Realizar pedido</button>
+                    <button id="clearCartBtn" class="btn btn-outline-secondary">Vaciar carrito</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal post agregar al carrito -->
+    <div class="modal fade" id="addedToCartModal" tabindex="-1" aria-labelledby="addedToCartModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addedToCartModalLabel">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>Producto agregado
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-0">Se agregó <strong id="addedToCartProductName">tu producto</strong> al carrito. ¿Qué deseas hacer?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" id="continueShoppingBtn" data-bs-dismiss="modal">Seguir comprando</button>
+                    <button type="button" class="btn btn-primary" id="goToCartBtn">
+                        <i class="bi bi-cart3 me-1"></i>Ir al carrito
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
