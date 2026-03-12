@@ -943,3 +943,10 @@ footer {
     opacity: 1 !important;
 }
 
+.navbar-logo {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
