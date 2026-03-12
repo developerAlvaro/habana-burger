@@ -1002,3 +1002,95 @@ footer {
     border-radius: 50%;
 }
 
+/* ===== Mobile app mode ===== */
+.navbar {
+    transition: padding 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+@media (max-width: 991.98px) {
+    .navbar {
+        padding-top: 0.65rem;
+        padding-bottom: 0.65rem;
+    }
+
+    .navbar.navbar-compact {
+        padding-top: 0.35rem;
+        padding-bottom: 0.35rem;
+        box-shadow: 0 0.45rem 1.4rem rgba(0, 0, 0, 0.26);
+    }
+
+    .navbar-brand {
+        font-size: 1rem;
+    }
+
+    .navbar-logo {
+        width: 28px;
+        height: 28px;
+    }
+
+    body.has-mobile-actions {
+        padding-bottom: calc(5.6rem + env(safe-area-inset-bottom));
+    }
+
+    .mobile-quick-actions {
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: calc(0.85rem + env(safe-area-inset-bottom));
+        width: min(94vw, 420px);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.65rem;
+        z-index: 1200;
+        padding: 0.5rem;
+        border-radius: 1rem;
+        background: rgba(17, 24, 39, 0.76);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.3);
+    }
+
+    .mobile-action-btn {
+        min-height: 48px;
+        border: 0;
+        border-radius: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.45rem;
+        font-weight: 700;
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: transform 0.15s ease, filter 0.15s ease;
+    }
+
+    .mobile-action-btn i {
+        font-size: 1rem;
+    }
+
+    .mobile-action-btn:active {
+        transform: scale(0.98);
+    }
+
+    .mobile-action-cart {
+        background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+    }
+
+    .mobile-action-wa {
+        background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+    }
+
+    .scroll-top-btn {
+        bottom: calc(6.2rem + env(safe-area-inset-bottom));
+        right: 1rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .navbar,
+    .mobile-action-btn {
+        transition: none !important;
+    }
+}
+

@@ -18,6 +18,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Setup sales cart
     setupSalesCart();
+
+    // Setup app-like mobile experience
+    setupMobileAppMode();
 });
 
 /**
@@ -268,6 +271,92 @@ function setupScrollToTopButton() {
             behavior: 'smooth'
         });
     });
+}
+
+/**
+ * Adds app-like mobile UX: compact navbar + floating quick actions
+ */
+function setupMobileAppMode() {
+    const navbar = document.querySelector('.navbar');
+    const body = document.body;
+
+    if (!navbar || !body) return;
+
+    let ticking = false;
+
+    function updateNavbarCompact() {
+        navbar.classList.toggle('navbar-compact', window.scrollY > 12);
+    }
+
+    function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+            updateNavbarCompact();
+            ticking = false;
+        });
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    updateNavbarCompact();
+
+    const mediaMobile = window.matchMedia('(max-width: 991.98px)');
+    const existingBar = document.getElementById('mobileQuickActions');
+
+    if (existingBar) existingBar.remove();
+
+    const actionsBar = document.createElement('div');
+    actionsBar.id = 'mobileQuickActions';
+    actionsBar.className = 'mobile-quick-actions';
+    actionsBar.setAttribute('aria-label', 'Acciones rápidas');
+
+    const cartBtn = document.createElement('button');
+    cartBtn.type = 'button';
+    cartBtn.className = 'mobile-action-btn mobile-action-cart';
+    cartBtn.innerHTML = '<i class="bi bi-cart3"></i><span>Carrito</span>';
+
+    const waBtn = document.createElement('a');
+    waBtn.className = 'mobile-action-btn mobile-action-wa';
+    waBtn.innerHTML = '<i class="bi bi-whatsapp"></i><span>WhatsApp</span>';
+    waBtn.setAttribute('rel', 'noopener noreferrer');
+    waBtn.setAttribute('target', '_blank');
+
+    const waLink = document.querySelector('a[href*="wa.me"]');
+    waBtn.href = waLink ? waLink.getAttribute('href') : 'https://wa.me/59893484775';
+
+    cartBtn.addEventListener('click', function () {
+        const cartOffcanvasEl = document.getElementById('cartOffcanvas');
+        if (window.bootstrap?.Offcanvas && cartOffcanvasEl) {
+            window.bootstrap.Offcanvas.getOrCreateInstance(cartOffcanvasEl).show();
+            return;
+        }
+
+        const fallbackCartBtn = document.getElementById('openCartBtn');
+        fallbackCartBtn?.click();
+    });
+
+    actionsBar.appendChild(cartBtn);
+    actionsBar.appendChild(waBtn);
+
+    function handleMobileBar() {
+        if (mediaMobile.matches) {
+            if (!document.getElementById('mobileQuickActions')) {
+                body.appendChild(actionsBar);
+            }
+            body.classList.add('has-mobile-actions');
+        } else {
+            actionsBar.remove();
+            body.classList.remove('has-mobile-actions');
+        }
+    }
+
+    handleMobileBar();
+
+    if (typeof mediaMobile.addEventListener === 'function') {
+        mediaMobile.addEventListener('change', handleMobileBar);
+    } else if (typeof mediaMobile.addListener === 'function') {
+        mediaMobile.addListener(handleMobileBar);
+    }
 }
 
 /**
