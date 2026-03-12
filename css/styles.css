@@ -17,7 +17,7 @@ body {
     padding: 0;
     background-color: #f4f4f4;
     scroll-behavior: smooth;
-    padding-top: 76px; /* ajusta según alto real del navbar */
+    /*padding-top: 76px; /* ajusta según alto real del navbar */
 }
 
 .cart-nav-item {
@@ -95,7 +95,7 @@ body {
 header {
     background: #35424a;
     color: #ffffff;
-    padding: 0.625rem 0;
+    /*padding: 0.625rem 0;*/
     text-align: center;
 }
 
