@@ -496,7 +496,7 @@ function setupSalesCart() {
                 : 'Sin extras';
 
             return [
-                `${idx + 1}. ${item.name} = ${formatCurrency(getItemFinalPrice(item))}`,
+                `${idx + 1}. ${item.name}`,
                 `   Base: ${formatCurrency(item.price)}`,
                 `   Ingredientes: ${selectedIngredients}`,
                 `   Extras: ${selectedExtras}`
