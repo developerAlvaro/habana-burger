@@ -313,7 +313,7 @@ function setupMobileAppMode() {
     const cartBtn = document.createElement('button');
     cartBtn.type = 'button';
     cartBtn.className = 'mobile-action-btn mobile-action-cart';
-    cartBtn.innerHTML = '<i class="bi bi-cart3"></i><span>Carrito</span>';
+    cartBtn.innerHTML = '<i class="bi bi-cart3"></i><span>Carrito</span><span id="mobileQuickCartCount" class="mobile-cart-count d-none">0</span>';
 
     const waBtn = document.createElement('a');
     waBtn.className = 'mobile-action-btn mobile-action-wa';
@@ -323,6 +323,14 @@ function setupMobileAppMode() {
 
     const waLink = document.querySelector('a[href*="wa.me"]');
     waBtn.href = waLink ? waLink.getAttribute('href') : 'https://wa.me/59893484775';
+
+    const desktopCartBadge = document.getElementById('cartCountBadge');
+    const mobileCartBadge = cartBtn.querySelector('#mobileQuickCartCount');
+    const initialCount = Number(desktopCartBadge?.textContent || 0);
+    if (mobileCartBadge) {
+        mobileCartBadge.textContent = String(initialCount);
+        mobileCartBadge.classList.toggle('d-none', initialCount <= 0);
+    }
 
     cartBtn.addEventListener('click', function () {
         const cartOffcanvasEl = document.getElementById('cartOffcanvas');
@@ -817,6 +825,11 @@ function setupSalesCart() {
         const totalPrice = cart.reduce((sum, item) => sum + getItemFinalPrice(item), 0);
 
         cartCountBadge.textContent = String(totalItems);
+        const mobileQuickCartCount = document.getElementById('mobileQuickCartCount');
+        if (mobileQuickCartCount) {
+            mobileQuickCartCount.textContent = String(totalItems);
+            mobileQuickCartCount.classList.toggle('d-none', totalItems <= 0);
+        }
         cartTotalEl.textContent = formatCurrency(totalPrice);
     }
 
