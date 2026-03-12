@@ -257,13 +257,28 @@ function setupScrollToTopButton() {
 
     if (!scrollTopBtn) return;
 
+    let isCartOpen = false;
+
     function toggleButtonVisibility() {
-        const shouldShow = window.scrollY > 300;
+        const shouldShow = window.scrollY > 300 && !isCartOpen;
         scrollTopBtn.classList.toggle('show', shouldShow);
     }
 
     window.addEventListener('scroll', toggleButtonVisibility);
     toggleButtonVisibility();
+
+    const cartOffcanvasEl = document.getElementById('cartOffcanvas');
+    if (cartOffcanvasEl) {
+        cartOffcanvasEl.addEventListener('show.bs.offcanvas', () => {
+            isCartOpen = true;
+            toggleButtonVisibility();
+        });
+
+        cartOffcanvasEl.addEventListener('hidden.bs.offcanvas', () => {
+            isCartOpen = false;
+            toggleButtonVisibility();
+        });
+    }
 
     scrollTopBtn.addEventListener('click', function() {
         window.scrollTo({
