@@ -403,6 +403,10 @@ function setupMobileAppMode() {
 function setupSalesCart() {
     const STORAGE_KEY = 'food_cart_v3';
 
+    // NUEVO: horario de la promo 2x1 de pancho
+    const horaInicioPromo = '16:00';
+    const horaFinPromo = '20:15';
+
     const INGREDIENTS_BY_PRODUCT = {
         hamburguesa: ['Queso', 'Huevo', 'Panceta', 'Ketchup', 'Mayonesa casera', 'Moztaza', 'Salza de la casa'],
         pancho: ['Queso', 'Panceta', 'Papas pai', 'Mayonesa casera', 'Ketchup', 'Salza de la casa']
@@ -421,7 +425,25 @@ function setupSalesCart() {
         ]
     };
 
+    // NUEVO: definición de promos disponibles
+    const PROMO_PACKS = {
+        pancho2x1: {
+            label: 'Promo 2x1 Pancho especial',
+            items: [
+                { name: 'Pancho especial (Promo 2x1)', price: 50, image: 'img/pancho.webp' },
+                { name: 'Pancho especial (Promo 2x1)', price: 50, image: 'img/pancho.webp' }
+            ]
+        },
+        comboFull: {
+            label: 'Combo Hamburguesa Full + Refresco',
+            items: [
+                { name: 'Combo Hamburguesa Full + Refresco', price: 150, image: 'img/hamburguesa.jpg' }
+            ]
+        }
+    };
+
     const serviciosSection = document.getElementById('servicios');
+    const portafolioSection = document.getElementById('portafolio'); // NUEVO
     const cartItemsEl = document.getElementById('cartItems');
     const cartTotalEl = document.getElementById('cartTotal');
     const cartCountBadge = document.getElementById('cartCountBadge');
@@ -451,7 +473,29 @@ function setupSalesCart() {
     let pendingProductToAdd = null;
 
     addButtonsToCards();
+    addButtonsToPromos(); // NUEVO
+    updatePanchoPromoButtonsState(); // NUEVO
+    setInterval(updatePanchoPromoButtonsState, 30000); // NUEVO: refresca estado cada 30s
     renderCart();
+
+    portafolioSection?.addEventListener('click', function (event) {
+        const btn = event.target.closest('.add-promo-btn');
+        if (!btn) return;
+
+        const promoKey = btn.dataset.promo;
+        const promo = PROMO_PACKS[promoKey];
+        if (!promo) return;
+
+        // NUEVO: valida horario para Pancho 2x1
+        if (promoKey === 'pancho2x1' && !isPanchoPromoAvailableNow()) {
+            alert(`La promo 2x1 está disponible de ${horaInicioPromo} a ${horaFinPromo}.`);
+            updatePanchoPromoButtonsState();
+            return;
+        }
+
+        addPromoPack(promo);
+        showPostAddChoice(promo.label);
+    });
 
     serviciosSection.addEventListener('click', function (event) {
         const btn = event.target.closest('.add-to-cart-btn');
@@ -720,6 +764,34 @@ function setupSalesCart() {
         });
     }
 
+    // NUEVO: agrega botones en tarjetas de promo
+    function addButtonsToPromos() {
+        if (!portafolioSection) return;
+
+        const promoBlocks = portafolioSection.querySelectorAll('.promo-block');
+        promoBlocks.forEach(block => {
+            if (block.querySelector('.add-promo-btn')) return;
+
+            const title = (block.querySelector('.promo-title')?.textContent || '').toLowerCase();
+            let promoKey = '';
+
+            if (title.includes('2x1') && title.includes('pancho')) promoKey = 'pancho2x1';
+            if (title.includes('combo') && title.includes('hamburguesa')) promoKey = 'comboFull';
+            if (!promoKey) return;
+
+            const body = block.querySelector('.card-body');
+            if (!body) return;
+
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'btn btn-primary w-100 mt-3 add-promo-btn';
+            button.dataset.promo = promoKey;
+            button.innerHTML = '<i class="bi bi-cart-plus me-1"></i>Agregar promo al carrito';
+
+            body.appendChild(button);
+        });
+    }
+
     function normalizeQuantity(rawValue) {
         const value = Math.floor(Number(rawValue) || 1);
         return Math.max(1, Math.min(15, value));
@@ -751,6 +823,30 @@ function setupSalesCart() {
                 selectedExtras: []
             });
         }
+
+        persistCart();
+        renderCart();
+    }
+
+    // NUEVO: agrega un pack promocional completo en un solo flujo
+    function addPromoPack(promo) {
+        if (!promo?.items?.length) return;
+
+        promo.items.forEach(item => {
+            const defaults = getDefaultIngredients(item.name);
+            const extras = getDefaultExtras(item.name);
+
+            cart.push({
+                id: uid(),
+                name: item.name,
+                price: Number(item.price || 0),
+                image: item.image || 'img/hamburguesa.jpg',
+                availableIngredients: defaults,
+                selectedIngredients: [...defaults],
+                availableExtras: extras,
+                selectedExtras: []
+            });
+        });
 
         persistCart();
         renderCart();
@@ -993,5 +1089,42 @@ function setupSalesCart() {
         } catch {
             return [];
         }
+    }
+
+    function parseHoraToMinutes(hora) {
+        const [h, m] = String(hora || '0:0').split(':').map(Number);
+        return (Number(h) || 0) * 60 + (Number(m) || 0);
+    }
+
+    function isNowInRange(startMinutes, endMinutes) {
+        const now = new Date();
+        const current = now.getHours() * 60 + now.getMinutes();
+
+        // soporta rango normal y rango que cruza medianoche
+        if (endMinutes >= startMinutes) {
+            return current >= startMinutes && current <= endMinutes;
+        }
+        return current >= startMinutes || current <= endMinutes;
+    }
+
+    function isPanchoPromoAvailableNow() {
+        const start = parseHoraToMinutes(horaInicioPromo);
+        const end = parseHoraToMinutes(horaFinPromo);
+        return isNowInRange(start, end);
+    }
+
+    function updatePanchoPromoButtonsState() {
+        if (!portafolioSection) return;
+
+        const buttons = portafolioSection.querySelectorAll('.add-promo-btn[data-promo="pancho2x1"]');
+        const available = isPanchoPromoAvailableNow();
+
+        buttons.forEach(btn => {
+            btn.disabled = !available;
+            btn.classList.toggle('disabled', !available);
+            btn.title = available
+                ? 'Promo disponible ahora'
+                : `Disponible de ${horaInicioPromo} a ${horaFinPromo}`;
+        });
     }
 }
