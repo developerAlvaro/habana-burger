@@ -617,6 +617,7 @@ function setupSalesCart() {
         cart = [];
         persistCart();
         renderCart();
+        
     });
 
     checkoutBtn?.addEventListener('click', function () {
@@ -922,6 +923,11 @@ function setupSalesCart() {
             `;
             cartTotalEl.textContent = '$0.00';
             cartCountBadge.textContent = '0';
+            const mobileQuickCartCount = document.getElementById('mobileQuickCartCount');
+            if (mobileQuickCartCount) {
+                mobileQuickCartCount.textContent = '0';
+                mobileQuickCartCount.classList.add('d-none');
+            }
             if (checkoutBtn) checkoutBtn.disabled = true;
             return;
         }
