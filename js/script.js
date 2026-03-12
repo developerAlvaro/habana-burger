@@ -606,12 +606,22 @@ function setupSalesCart() {
     function buildWhatsAppOrderMessage(items, total, customerName) {
         const lines = items.map((item, idx) => {
             let selectedIngredients;
+            
             if (!item.selectedIngredients?.length) {
                 selectedIngredients = 'Sin ingredientes';
             } else if (allIngredientsSelected(item)) {
                 selectedIngredients = 'Completa';
             } else {
-                selectedIngredients = item.selectedIngredients.join(', ');
+                // INVERTIDO: mostrar ingredientes NO seleccionados (los que NO quiere)
+                const available = item.availableIngredients || [];
+                const selected = item.selectedIngredients || [];
+                const notSelected = available.filter(ing => !selected.includes(ing));
+                
+                if (notSelected.length === 0) {
+                    selectedIngredients = 'Completa';
+                } else {
+                    selectedIngredients = `SIN ${notSelected.join(', ')}`;
+                }
             }
 
             const selectedExtras = item.selectedExtras?.length
