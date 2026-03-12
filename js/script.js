@@ -725,6 +725,14 @@ function setupSalesCart() {
         return Math.max(1, Math.min(15, value));
     }
 
+    qtyPlus.addEventListener("click", () => {
+        quantityInputEl.value = normalizeQuantity(Number(quantityInputEl.value) + 1);
+    });
+
+    qtyMinus.addEventListener("click", () => {
+        quantityInputEl.value = normalizeQuantity(Number(quantityInputEl.value) - 1);
+    });
+    
     function addItem(name, price, image, quantity = 1) {
         const qty = normalizeQuantity(quantity);
 

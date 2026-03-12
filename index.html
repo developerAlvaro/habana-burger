@@ -433,16 +433,20 @@ Preparamos hamburguesas jugosas y panchos con panceta crocante, hechos al moment
                     <p class="mb-2">Producto: <strong id="quantityProductName">Producto</strong></p>
                     <p class="mb-2">Gustos: <strong>Podrás modificar los gustos de forma individual desde el carrito.</strong></p>
                     <label for="quantityInput" class="form-label">Cantidad</label>
-                    <input
-                        id="quantityInput"
-                        type="number"
-                        class="form-control"
-                        min="1"
-                        max="15"
-                        step="1"
-                        value="1"
-                        inputmode="numeric"
-                    >
+                    <div class="d-flex align-items-center gap-2">
+                        <button class="btn btn-outline-secondary" id="qtyMinus">-</button>
+
+                        <input
+                            id="quantityInput"
+                            type="text"
+                            class="form-control text-center"
+                            value="1"
+                            inputmode="numeric"
+                            style="width:60px"
+                        >
+
+                        <button class="btn btn-outline-secondary" id="qtyPlus">+</button>
+                    </div>
                     <small class="text-muted">Podés agregar entre 1 y 15 unidades.</small>
                 </div>
                 <div class="modal-footer">
