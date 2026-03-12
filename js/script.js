@@ -389,8 +389,8 @@ function setupSalesCart() {
     const STORAGE_KEY = 'food_cart_v3';
 
     const INGREDIENTS_BY_PRODUCT = {
-        hamburguesa: ['Queso', 'Huevo', 'Panceta', 'Ketchup', 'Mayonesa', 'Moztaza', 'Salza de pepinillos'],
-        pancho: ['Queso', 'Panceta', 'Papas pai', 'Mayonesa', 'Ketchup', 'Salza de pepinillos']
+        hamburguesa: ['Queso', 'Huevo', 'Panceta', 'Ketchup', 'Mayonesa casera', 'Moztaza', 'Salza de la casa'],
+        pancho: ['Queso', 'Panceta', 'Papas pai', 'Mayonesa casera', 'Ketchup', 'Salza de la casa']
     };
 
     const EXTRA_INGREDIENTS_BY_PRODUCT = {
