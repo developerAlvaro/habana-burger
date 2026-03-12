@@ -431,6 +431,10 @@ function setupSalesCart() {
     const addedToCartProductNameEl = document.getElementById('addedToCartProductName');
     const goToCartBtn = document.getElementById('goToCartBtn');
     const cartOffcanvasEl = document.getElementById('cartOffcanvas');
+    const quantityModalEl = document.getElementById('quantityModal');
+    const quantityProductNameEl = document.getElementById('quantityProductName');
+    const quantityInputEl = document.getElementById('quantityInput');
+    const confirmQuantityBtn = document.getElementById('confirmQuantityBtn');
 
     if (!serviciosSection || !cartItemsEl || !cartTotalEl || !cartCountBadge) return;
 
@@ -438,9 +442,13 @@ function setupSalesCart() {
     const addedToCartModal = (window.bootstrap && addedToCartModalEl)
         ? window.bootstrap.Modal.getOrCreateInstance(addedToCartModalEl)
         : null;
+    const quantityModal = (window.bootstrap && quantityModalEl)
+        ? window.bootstrap.Modal.getOrCreateInstance(quantityModalEl)
+        : null;
     const cartOffcanvas = (window.bootstrap && cartOffcanvasEl)
         ? window.bootstrap.Offcanvas.getOrCreateInstance(cartOffcanvasEl)
         : null;
+    let pendingProductToAdd = null;
 
     addButtonsToCards();
     renderCart();
@@ -457,8 +465,44 @@ function setupSalesCart() {
         const image = btn.dataset.image || imageEl?.getAttribute('src') || 'img/hamburguesa.jpg';
 
         if (price <= 0) return;
-        addItem(name, price, image);
+        pendingProductToAdd = { name, price, image };
+
+        if (quantityProductNameEl) quantityProductNameEl.textContent = name;
+        if (quantityInputEl) quantityInputEl.value = '1';
+
+        if (quantityModal) {
+            quantityModal.show();
+            return;
+        }
+
+        const userQty = Number(window.prompt('Cantidad (1 a 15):', '1') || 1);
+        const quantity = normalizeQuantity(userQty);
+        addItem(name, price, image, quantity);
         showPostAddChoice(name);
+    });
+
+    quantityInputEl?.addEventListener('input', function () {
+        this.value = String(normalizeQuantity(this.value));
+    });
+
+    quantityInputEl?.addEventListener('keydown', function (event) {
+        if (event.key !== 'Enter') return;
+        event.preventDefault();
+        confirmQuantityBtn?.click();
+    });
+
+    confirmQuantityBtn?.addEventListener('click', function () {
+        if (!pendingProductToAdd) return;
+
+        const quantity = normalizeQuantity(quantityInputEl?.value || 1);
+        addItem(pendingProductToAdd.name, pendingProductToAdd.price, pendingProductToAdd.image, quantity);
+        quantityModal?.hide();
+        showPostAddChoice(pendingProductToAdd.name);
+        pendingProductToAdd = null;
+    });
+
+    quantityModalEl?.addEventListener('hidden.bs.modal', function () {
+        pendingProductToAdd = null;
     });
 
     goToCartBtn?.addEventListener('click', function () {
@@ -676,20 +720,29 @@ function setupSalesCart() {
         });
     }
 
-    function addItem(name, price, image) {
-        const defaults = getDefaultIngredients(name);
-        const extras = getDefaultExtras(name);
+    function normalizeQuantity(rawValue) {
+        const value = Math.floor(Number(rawValue) || 1);
+        return Math.max(1, Math.min(15, value));
+    }
 
-        cart.push({
-            id: uid(),
-            name,
-            price,
-            image,
-            availableIngredients: defaults,
-            selectedIngredients: [...defaults],
-            availableExtras: extras,
-            selectedExtras: []
-        });
+    function addItem(name, price, image, quantity = 1) {
+        const qty = normalizeQuantity(quantity);
+
+        for (let i = 0; i < qty; i++) {
+            const defaults = getDefaultIngredients(name);
+            const extras = getDefaultExtras(name);
+
+            cart.push({
+                id: uid(),
+                name,
+                price,
+                image,
+                availableIngredients: defaults,
+                selectedIngredients: [...defaults],
+                availableExtras: extras,
+                selectedExtras: []
+            });
+        }
 
         persistCart();
         renderCart();

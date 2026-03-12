@@ -419,6 +419,42 @@ Preparamos hamburguesas jugosas y panchos con panceta crocante, hechos al moment
         </div>
     </div>
 
+    <!-- Modal cantidad a agregar -->
+    <div class="modal fade" id="quantityModal" tabindex="-1" aria-labelledby="quantityModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="quantityModalLabel">
+                        <i class="bi bi-bag-plus me-2"></i>Elegí la cantidad
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-2">Producto: <strong id="quantityProductName">Producto</strong></p>
+                    <p class="mb-2">Gustos: <strong>Podrás modificar los gustos de forma individual desde el carrito.</strong></p>
+                    <label for="quantityInput" class="form-label">Cantidad</label>
+                    <input
+                        id="quantityInput"
+                        type="number"
+                        class="form-control"
+                        min="1"
+                        max="15"
+                        step="1"
+                        value="1"
+                        inputmode="numeric"
+                    >
+                    <small class="text-muted">Podés agregar entre 1 y 15 unidades.</small>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="confirmQuantityBtn">
+                        <i class="bi bi-cart-plus me-1"></i>Agregar al carrito
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal post agregar al carrito -->
     <div class="modal fade" id="addedToCartModal" tabindex="-1" aria-labelledby="addedToCartModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
