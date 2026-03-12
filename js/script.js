@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Setup app-like mobile experience
     setupMobileAppMode();
 });
-
+const WHATSAPP_NUMBER = '+59893484775'; // Número de WhatsApp para contacto (formato internacional con código de país)
 /**
  * Animates skill bars using Intersection Observer
  */
@@ -89,7 +89,7 @@ function setupContactForm() {
     };
 
     const alertBox = document.getElementById('contactFormAlert');
-    const WHATSAPP_NUMBER = '+59893484775';
+    
     const phoneRegex = /^[0-9+\s()-]{8,20}$/;
 
     function setFieldState(field, message) {
@@ -320,9 +320,10 @@ function setupMobileAppMode() {
     waBtn.innerHTML = '<i class="bi bi-whatsapp"></i><span>WhatsApp</span>';
     waBtn.setAttribute('rel', 'noopener noreferrer');
     waBtn.setAttribute('target', '_blank');
-
+    
+    
     const waLink = document.querySelector('a[href*="wa.me"]');
-    waBtn.href = waLink ? waLink.getAttribute('href') : 'https://wa.me/59893484775';
+    waBtn.href = waLink ? waLink.getAttribute('href') : `https://wa.me/${WHATSAPP_NUMBER}`;
 
     const desktopCartBadge = document.getElementById('cartCountBadge');
     const mobileCartBadge = cartBtn.querySelector('#mobileQuickCartCount');
@@ -365,6 +366,20 @@ function setupMobileAppMode() {
     } else if (typeof mediaMobile.addListener === 'function') {
         mediaMobile.addListener(handleMobileBar);
     }
+
+    // NUEVO: ocultar acciones rápidas cuando el carrito (offcanvas) está abierto
+    const cartOffcanvasEl = document.getElementById('cartOffcanvas');
+    if (cartOffcanvasEl) {
+        cartOffcanvasEl.addEventListener('show.bs.offcanvas', () => {
+            actionsBar.classList.add('d-none');
+        });
+
+        cartOffcanvasEl.addEventListener('hidden.bs.offcanvas', () => {
+            if (mediaMobile.matches) {
+                actionsBar.classList.remove('d-none');
+            }
+        });
+    }
 }
 
 /**
@@ -372,7 +387,6 @@ function setupMobileAppMode() {
  */
 function setupSalesCart() {
     const STORAGE_KEY = 'food_cart_v3';
-    const WHATSAPP_NUMBER = '+59893484775';
 
     const INGREDIENTS_BY_PRODUCT = {
         hamburguesa: ['Queso', 'Huevo', 'Panceta', 'Ketchup', 'Mayonesa', 'Moztaza', 'Salza de pepinillos'],
@@ -726,6 +740,7 @@ function setupSalesCart() {
             `;
             cartTotalEl.textContent = '$0.00';
             cartCountBadge.textContent = '0';
+            if (checkoutBtn) checkoutBtn.disabled = true;
             return;
         }
 
@@ -831,6 +846,7 @@ function setupSalesCart() {
             mobileQuickCartCount.classList.toggle('d-none', totalItems <= 0);
         }
         cartTotalEl.textContent = formatCurrency(totalPrice);
+        if (checkoutBtn) checkoutBtn.disabled = false;
     }
 
     function formatCurrency(value) {
