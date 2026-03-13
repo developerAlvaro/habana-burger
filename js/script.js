@@ -404,7 +404,7 @@ function setupSalesCart() {
     const STORAGE_KEY = 'food_cart_v3';
 
     // NUEVO: horario de la promo 2x1 de pancho
-    const horaInicioPromo = '16:00';
+    const horaInicioPromo = '15:00';
     const horaFinPromo = '20:15';
 
     const INGREDIENTS_BY_PRODUCT = {
@@ -428,10 +428,10 @@ function setupSalesCart() {
     // NUEVO: definición de promos disponibles
     const PROMO_PACKS = {
         pancho2x1: {
-            label: 'Promo 2x1 Pancho especial',
+            label: 'Promo 2 x 180 en Pancho especial',
             items: [
-                { name: 'Pancho especial (Promo 2x1)', price: 50, image: 'img/pancho.webp' },
-                { name: 'Pancho especial (Promo 2x1)', price: 50, image: 'img/pancho.webp' }
+                { name: 'Pancho especial (Promo)', price: 90, image: 'img/pancho.webp' },
+                { name: 'Pancho especial (Promo)', price: 90, image: 'img/pancho.webp' }
             ]
         },
         comboFull: {
@@ -774,9 +774,9 @@ function setupSalesCart() {
             if (block.querySelector('.add-promo-btn')) return;
 
             const title = (block.querySelector('.promo-title')?.textContent || '').toLowerCase();
-            let promoKey = '';
+            let promoKey = ''
 
-            if (title.includes('2x1') && title.includes('pancho')) promoKey = 'pancho2x1';
+            if (title.includes('promo') && title.includes('pancho')) promoKey = 'pancho2x1';
             if (title.includes('combo') && title.includes('hamburguesa')) promoKey = 'comboFull';
             if (!promoKey) return;
 
