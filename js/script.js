@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Setup app-like mobile experience
     setupMobileAppMode();
 });
-const WHATSAPP_NUMBER = '+59893484775'; // Número de WhatsApp para contacto (formato internacional con código de país)
+const WHATSAPP_NUMBER = '+59895369347'; // Número de WhatsApp para contacto (formato internacional con código de país)
 /**
  * Animates skill bars using Intersection Observer
  */
