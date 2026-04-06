@@ -81,7 +81,7 @@ Preparamos hamburguesas jugosas y panchos con panceta crocante, hechos al moment
 
             <div class="row g-4 justify-content-center">
                 <div class="col-12 col-md-6 col-xl-5">
-                    <article class="service-card card h-100 border-0">
+                    <article class="service-card card h-100 border-0" data-product-key="hamburguesa">
                         <img src="img/hamburguesa.jpg" class="service-img" alt="Hamburguesa con queso, huevo y panceta">
                         <div class="card-body p-4">
                             <span class="service-price">$120</span>
@@ -95,7 +95,7 @@ Preparamos hamburguesas jugosas y panchos con panceta crocante, hechos al moment
                 </div>
 
                 <div class="col-12 col-md-6 col-xl-5">
-                    <article class="service-card card h-100 border-0">
+                    <article class="service-card card h-100 border-0" data-product-key="pancho">
                         <img src="img/pancho.webp" class="service-img" alt="Pancho con queso, panceta y papas pai">
                         <div class="card-body p-4">
                             <span class="service-price">$100</span>
@@ -107,7 +107,6 @@ Preparamos hamburguesas jugosas y panchos con panceta crocante, hechos al moment
                         </div>
                     </article>
                 </div>
-                
             </div>
         </section>
         <!-- ...existing code... -->
@@ -435,6 +434,36 @@ Preparamos hamburguesas jugosas y panchos con panceta crocante, hechos al moment
     <footer>
         <p>&copy; 2026 My Web Project</p>
         <p class="mb-0 small">Horario: Jueves a sábado, de 19:30 a 00:00</p>
+
+        <div class="mt-3">
+            <button id="adminAccessBtn" type="button" class="btn btn-sm btn-outline-light">
+                Admin
+            </button>
+        </div>
+
+        <div id="adminPanel" class="admin-panel d-none mt-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                        <div class="text-start">
+                            <strong>Panel admin</strong>
+                            <div class="small text-muted">Control rápido de stock visible en la web.</div>
+                        </div>
+
+                        <div class="form-check form-switch m-0">
+                            <input class="form-check-input" type="checkbox" id="panchoAvailabilityToggle" checked>
+                            <label class="form-check-label text-dark" for="panchoAvailabilityToggle">
+                                Pancho disponible
+                            </label>
+                        </div>
+
+                        <button id="adminLogoutBtn" type="button" class="btn btn-sm btn-outline-secondary">
+                            Cerrar admin
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </footer>
 
     <button id="scrollTopBtn" class="scroll-top-btn" type="button" aria-label="Volver arriba">
@@ -491,8 +520,8 @@ Preparamos hamburguesas jugosas y panchos con panceta crocante, hechos al moment
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="mb-2">Producto: <strong id="quantityProductName">Producto</strong></p>
-                    <p class="mb-2">Gustos: <strong>Podrás modificar los gustos de forma individual desde el carrito.</strong></p>
+                    <p class="mb-2"><strong>Producto: </strong><span id="quantityProductName"></span></p>
+                    <p class="mb-2"><strong>Gustos: </strong><span class="text-success">Podrás modificar los gustos de forma individual desde el carrito.</span></p>
                     <label for="quantityInput" class="form-label">Cantidad</label>
                     <div class="d-flex align-items-center gap-2">
                         <button class="btn btn-outline-secondary" id="qtyMinus">-</button>

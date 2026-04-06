@@ -19,10 +19,97 @@ document.addEventListener('DOMContentLoaded', function() {
     // Setup sales cart
     setupSalesCart();
 
+    // Setup local admin mode
+    setupAdminMode();
+
     // Setup app-like mobile experience
     setupMobileAppMode();
 });
-const WHATSAPP_NUMBER = '+59895369347'; // Número de WhatsApp para contacto (formato internacional con código de país)
+
+const WHATSAPP_NUMBER = '+59895369347';
+const PRODUCT_STATUS_STORAGE_KEY = 'tisa_product_status_v1';
+const ADMIN_SESSION_STORAGE_KEY = 'tisa_admin_session';
+const ADMIN_PASSWORD = '123456789';
+
+function getProductAvailability() {
+    try {
+        const parsed = JSON.parse(localStorage.getItem(PRODUCT_STATUS_STORAGE_KEY) || '{}');
+        return {
+            hamburguesa: parsed.hamburguesa !== false,
+            pancho: parsed.pancho !== false
+        };
+    } catch {
+        return {
+            hamburguesa: true,
+            pancho: true
+        };
+    }
+}
+
+function saveProductAvailability(status) {
+    const normalizedStatus = {
+        hamburguesa: status?.hamburguesa !== false,
+        pancho: status?.pancho !== false
+    };
+
+    localStorage.setItem(PRODUCT_STATUS_STORAGE_KEY, JSON.stringify(normalizedStatus));
+    document.dispatchEvent(new CustomEvent('productAvailabilityChanged', {
+        detail: normalizedStatus
+    }));
+}
+
+function setupAdminMode() {
+    const accessBtn = document.getElementById('adminAccessBtn');
+    const panel = document.getElementById('adminPanel');
+    const logoutBtn = document.getElementById('adminLogoutBtn');
+    const panchoToggle = document.getElementById('panchoAvailabilityToggle');
+
+    if (!accessBtn || !panel || !logoutBtn || !panchoToggle) return;
+
+    function isAdminSessionOpen() {
+        return localStorage.getItem(ADMIN_SESSION_STORAGE_KEY) === 'true';
+    }
+
+    function syncAdminPanel() {
+        const isOpen = isAdminSessionOpen();
+        const availability = getProductAvailability();
+
+        panel.classList.toggle('d-none', !isOpen);
+        accessBtn.textContent = isOpen ? 'Admin activo' : 'Admin';
+        panchoToggle.checked = availability.pancho !== false;
+    }
+
+    accessBtn.addEventListener('click', function () {
+        if (isAdminSessionOpen()) {
+            panel.classList.toggle('d-none');
+            return;
+        }
+
+        const password = window.prompt('Ingresá la clave admin');
+        if (password !== ADMIN_PASSWORD) {
+            alert('Clave incorrecta.');
+            return;
+        }
+
+        localStorage.setItem(ADMIN_SESSION_STORAGE_KEY, 'true');
+        syncAdminPanel();
+    });
+
+    logoutBtn.addEventListener('click', function () {
+        localStorage.removeItem(ADMIN_SESSION_STORAGE_KEY);
+        syncAdminPanel();
+    });
+
+    panchoToggle.addEventListener('change', function () {
+        const availability = getProductAvailability();
+        availability.pancho = this.checked;
+        saveProductAvailability(availability);
+    });
+
+    document.addEventListener('productAvailabilityChanged', syncAdminPanel);
+    syncAdminPanel();
+}
+
 /**
  * Animates skill bars using Intersection Observer
  */
@@ -457,25 +544,95 @@ function setupSalesCart() {
     const quantityProductNameEl = document.getElementById('quantityProductName');
     const quantityInputEl = document.getElementById('quantityInput');
     const confirmQuantityBtn = document.getElementById('confirmQuantityBtn');
+    const qtyPlusBtn = document.getElementById('qtyPlus');
+    const qtyMinusBtn = document.getElementById('qtyMinus');
+    const quantityModal = window.bootstrap?.Modal && quantityModalEl
+        ? window.bootstrap.Modal.getOrCreateInstance(quantityModalEl)
+        : null;
+    const addedToCartModal = window.bootstrap?.Modal && addedToCartModalEl
+        ? window.bootstrap.Modal.getOrCreateInstance(addedToCartModalEl)
+        : null;
+    const cartOffcanvas = window.bootstrap?.Offcanvas && cartOffcanvasEl
+        ? window.bootstrap.Offcanvas.getOrCreateInstance(cartOffcanvasEl)
+        : null;
 
     if (!serviciosSection || !cartItemsEl || !cartTotalEl || !cartCountBadge) return;
 
     let cart = loadCart();
-    const addedToCartModal = (window.bootstrap && addedToCartModalEl)
-        ? window.bootstrap.Modal.getOrCreateInstance(addedToCartModalEl)
-        : null;
-    const quantityModal = (window.bootstrap && quantityModalEl)
-        ? window.bootstrap.Modal.getOrCreateInstance(quantityModalEl)
-        : null;
-    const cartOffcanvas = (window.bootstrap && cartOffcanvasEl)
-        ? window.bootstrap.Offcanvas.getOrCreateInstance(cartOffcanvasEl)
-        : null;
     let pendingProductToAdd = null;
 
+    // NUEVO: agrega botones en tarjetas de promo
+    function addButtonsToPromos() {
+        if (!portafolioSection) return;
+
+        const promoBlocks = portafolioSection.querySelectorAll('.promo-block');
+        promoBlocks.forEach(block => {
+            if (block.querySelector('.add-promo-btn')) return;
+
+            const title = (block.querySelector('.promo-title')?.textContent || '').toLowerCase();
+            let promoKey = ''
+
+            if (title.includes('promo') && title.includes('pancho')) promoKey = 'pancho2x1';
+            if (title.includes('combo') && title.includes('hamburguesa')) promoKey = 'comboFull';
+            if (!promoKey) return;
+
+            const body = block.querySelector('.card-body');
+            if (!body) return;
+
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'btn btn-primary w-100 mt-3 add-promo-btn';
+            button.dataset.promo = promoKey;
+            button.innerHTML = '<i class="bi bi-cart-plus me-1"></i>Agregar promo al carrito';
+
+            body.appendChild(button);
+        });
+    }
+
+    function isProductAvailable(productKey) {
+        const availability = getProductAvailability();
+        return availability[productKey] !== false;
+    }
+
+    function applyProductAvailability() {
+        const cards = serviciosSection.querySelectorAll('.service-card[data-product-key]');
+
+        cards.forEach(card => {
+            const productKey = card.dataset.productKey || '';
+            const isAvailable = isProductAvailable(productKey);
+            const button = card.querySelector('.add-to-cart-btn');
+            const body = card.querySelector('.card-body');
+
+            card.classList.toggle('product-unavailable', !isAvailable);
+
+            if (button) {
+                button.disabled = !isAvailable;
+                button.innerHTML = isAvailable
+                    ? '<i class="bi bi-cart-plus"></i> Agregar al carrito'
+                    : '<i class="bi bi-slash-circle me-1"></i> Agotado';
+            }
+
+            let stockNote = card.querySelector('.product-stock-note');
+
+            if (!isAvailable && body && !stockNote) {
+                stockNote = document.createElement('div');
+                stockNote.className = 'product-stock-note';
+                stockNote.textContent = 'Sin stock por el momento';
+                body.appendChild(stockNote);
+            }
+
+            if (isAvailable && stockNote) {
+                stockNote.remove();
+            }
+        });
+    }
+
     addButtonsToCards();
-    addButtonsToPromos(); // NUEVO
-    updatePanchoPromoButtonsState(); // NUEVO
-    setInterval(updatePanchoPromoButtonsState, 30000); // NUEVO: refresca estado cada 30s
+    addButtonsToPromos();
+    updatePanchoPromoButtonsState();
+    applyProductAvailability();
+    document.addEventListener('productAvailabilityChanged', applyProductAvailability);
+    setInterval(updatePanchoPromoButtonsState, 30000);
     renderCart();
 
     portafolioSection?.addEventListener('click', function (event) {
@@ -503,6 +660,12 @@ function setupSalesCart() {
 
         const card = btn.closest('.service-card');
         const imageEl = card?.querySelector('.service-img');
+        const productKey = btn.dataset.productKey || card?.dataset.productKey || '';
+
+        if (productKey && !isProductAvailable(productKey)) {
+            alert('Este producto está agotado por ahora.');
+            return;
+        }
 
         const name = btn.dataset.product || 'Producto';
         const price = Number(btn.dataset.price || 0);
@@ -745,6 +908,7 @@ function setupSalesCart() {
             const titleEl = card.querySelector('.service-card-title');
             const priceEl = card.querySelector('.service-price');
             const imageEl = card.querySelector('.service-img');
+            const productKey = card.dataset.productKey || '';
 
             if (!body || !titleEl || !priceEl) return;
             if (body.querySelector('.add-to-cart-btn')) return;
@@ -759,6 +923,7 @@ function setupSalesCart() {
             button.dataset.product = name;
             button.dataset.price = String(price);
             button.dataset.image = image;
+            button.dataset.productKey = productKey;
             button.innerHTML = '<i class="bi bi-cart-plus"></i> Agregar al carrito';
 
             body.appendChild(button);
@@ -798,11 +963,11 @@ function setupSalesCart() {
         return Math.max(1, Math.min(15, value));
     }
 
-    qtyPlus.addEventListener("click", () => {
+    qtyPlusBtn?.addEventListener('click', () => {
         quantityInputEl.value = normalizeQuantity(Number(quantityInputEl.value) + 1);
     });
 
-    qtyMinus.addEventListener("click", () => {
+    qtyMinusBtn?.addEventListener('click', () => {
         quantityInputEl.value = normalizeQuantity(Number(quantityInputEl.value) - 1);
     });
     
@@ -993,7 +1158,7 @@ function setupSalesCart() {
                                     <div class="small fw-semibold text-dark item-total-line">Total item: ${formatCurrency(getItemFinalPrice(item))}</div>
                                     <div class="mt-1 ingredient-status-badge">${ingredientLabel}</div>
 
-                                    <button class="btn btn-link btn-sm p-0 mt-1 text-decoration-none" type="button" data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-expanded="false">
+                                    <button class="btn btn-outline-primary btn-sm mt-2 px-3 py-1 rounded-pill" type="button" data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-expanded="false">
                                         Ingredientes y extras
                                     </button>
 

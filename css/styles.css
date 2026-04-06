@@ -1130,3 +1130,24 @@ footer {
     }
 }
 
+.product-unavailable {
+    opacity: 0.72;
+}
+
+.product-unavailable .service-img {
+    filter: grayscale(0.45);
+}
+
+.product-stock-note {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #dc3545;
+}
+
+.admin-panel {
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
